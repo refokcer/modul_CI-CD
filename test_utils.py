@@ -1,4 +1,4 @@
-from utils import process_text, count_words, count_sentences
+from utils import process_text, count_words, count_sentences, write_results_to_file
 from tempfile import NamedTemporaryFile
 import pytest
 
@@ -52,3 +52,23 @@ def test_process_text(create_temp_file, content, expected_word_count, expected_s
     word_count, sentence_count = process_text(filename)
     assert word_count == expected_word_count, f"Очікувалось {expected_word_count} слів, але знайдено {word_count}"
     assert sentence_count == expected_sentence_count, f"Очікувалось {expected_sentence_count} речень, але знайдено {sentence_count}"
+
+
+
+@pytest.fixture
+def temp_file(tmp_path):
+    return tmp_path / "test_output.txt"
+
+@pytest.mark.parametrize("word_count,sentence_count,expected_content", [
+    (5, 2, "Кількість слів: 5, Кількість речень: 2\n"),
+    (0, 0, "Кількість слів: 0, Кількість речень: 0\n"),
+    (100, 50, "Кількість слів: 100, Кількість речень: 50\n"),
+])
+def test_write_results_to_file(temp_file, word_count, sentence_count, expected_content):
+    # Викликаємо функцію для запису результатів у тимчасовий файл
+    write_results_to_file(temp_file, word_count, sentence_count)
+
+    # Перевіряємо вміст файлу
+    with open(temp_file, 'r', encoding='utf-8') as file:
+        content = file.read()
+        assert content == expected_content, f"Фактичний вміст файлу: {content}"
