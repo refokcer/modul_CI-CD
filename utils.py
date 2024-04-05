@@ -32,12 +32,5 @@ def process_text(filename: str) -> tuple[int, int]:
 
 
 def write_results_to_file(output_filename: str, word_count: int, sentence_count: int):
-    """
-    Записує результати підрахунку слів і речень у текстовий файл.
-
-    :param output_filename: Шлях до файлу для запису результатів.
-    :param word_count: Кількість слів.
-    :param sentence_count: Кількість речень.
-    """
     with open(output_filename, 'w', encoding='utf-8') as file:
         file.write(f"Number of words: {word_count}, Number of sentences: {sentence_count}\n")
