@@ -1,29 +1,31 @@
-def count_words_and_sentences(file_path: str) -> tuple[int, int]:
-    """
-    This function reads the content of a ".txt" file and returns the number of words and sentences in the file.
+def count_sentences(content: str) -> int:
+    # Визначаємо символи, які закінчують речення
+    sentence_endings = {'.', '!', '?'}
+    sentence_count = sum(content.count(end) for end in sentence_endings)
+    # Додаємо рахунок для '...', оскільки попередній підрахунок додав би 3 за кожне '...'
+    additional_count = content.count('...')
+    sentence_count -= 2 * additional_count
+    return sentence_count
 
-    Args:
-        file_path: Path to the ".txt" file.
 
-    Returns:
-        Tuple: Number of words (int) and number of sentences (int).
-    """
-    try:
-        # Open the file for reading
-        with open(file_path, 'r') as file:
-            # Read the file content
-            text = file.read()
-            words = 0
-            sentences = 0
-            for word in text.split():
-                if word:
-                    words += 1
+def count_words(content: str) -> int:
+    # Визначаємо символи-розділювачі
+    word_delimiters = {',', ' ', ':', ';'}
+    # Підготовка тексту для підрахунку слів
+    for delimiter in word_delimiters:
+        content = content.replace(delimiter, ' ')
+    # Рахуємо слова
+    words = content.split()
+    return len(words)
 
-            for punctuation in [".", "!", "?", "..."]:
-                sentences += text.count(punctuation)
 
-            return words, sentences
-    except FileNotFoundError:
-        print("File not found.")
-    except Exception as e:
-        print("An error occurred:", e)
+def process_text(filename: str) -> tuple[int, int]:
+    # Читаємо вміст файлу
+    with open(filename, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    # Викликаємо функції для підрахунку слів та речень
+    word_count = count_words(content)
+    sentence_count = count_sentences(content)
+
+    return word_count, sentence_count
