@@ -5,10 +5,10 @@ import pytest
 
 # Тестові дані для функції count_sentences
 @pytest.mark.parametrize("content,expected", [
-    ("Це перше речення. І це друге!", 2),
-    ("Чи буде це... рахуватися як два речення?", 2),
-    ("Без закінчення", 0),
-    ("Одне речення! Ще одне речення. І ще одне?", 3),
+    ("This is the first sentence. And this is the second!", 2),
+    ("Will this... count as two sentences?", 2),
+    ("Without ending", 0),
+    ("One sentence! One more sentence. And one more?", 3),
     ("...?!!!", 5),
 ])
 def test_count_sentences(content, expected):
@@ -17,11 +17,11 @@ def test_count_sentences(content, expected):
 
 # Тестові дані для функції count_words
 @pytest.mark.parametrize("content,expected", [
-    ("Це три слова.", 3),
-    ("Пробіли    і табуляції\tзараз", 4),
+    ("These are four words.", 4),
+    ("Spaces and tabs\t now", 4),
     ("", 0),
-    ("Пунктуація, не впливає: на; кількість? слів!", 6),
-    ("Одне-два, три-чотири", 2),
+    ("Punctuation, does not affect: the number of words!", 8),
+    ("One-two, three-four", 2),
 ])
 def test_count_words(content, expected):
     assert count_words(content) == expected, f"Помилка у функції count_words для тексту: {content}"
@@ -41,11 +41,11 @@ def create_temp_file():
 
 # Параметризований тест для функції process_text
 @pytest.mark.parametrize("content,expected_word_count,expected_sentence_count", [
-    ("Один. Два, три; чотири! П'ять?", 5, 3),
-    ("Без слів без речень...", 4, 1),
-    ("Просто речення без знаків пунктуації", 5, 0),
+    ("One. Two, three; four! Five?", 5, 3),
+    ("No words, no sentences...", 4, 1),
+    ("Just a sentence without punctuation", 5, 0),
     ("", 0, 0),  # Порожній файл
-    ("Одне речення. І ще одне... І ще одне!", 8, 3),
+    ("One sentence. And one more... And one more!", 8, 3),
 ])
 def test_process_text(create_temp_file, content, expected_word_count, expected_sentence_count):
     filename = create_temp_file(content)
@@ -58,11 +58,10 @@ def test_process_text(create_temp_file, content, expected_word_count, expected_s
 @pytest.fixture
 def temp_file(tmp_path):
     return tmp_path / "test_output.txt"
-
 @pytest.mark.parametrize("word_count,sentence_count,expected_content", [
-    (5, 2, "Кількість слів: 5, Кількість речень: 2\n"),
-    (0, 0, "Кількість слів: 0, Кількість речень: 0\n"),
-    (100, 50, "Кількість слів: 100, Кількість речень: 50\n"),
+    (5, 2, "Number of words: 5, Number of sentences: 2\n"),
+    (0, 0, "Number of words: 0, Number of sentences: 0\n"),
+    (100, 50, "Number of words: 100, Number of sentences: 50\n"),
 ])
 def test_write_results_to_file(temp_file, word_count, sentence_count, expected_content):
     # Викликаємо функцію для запису результатів у тимчасовий файл

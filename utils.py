@@ -40,4 +40,4 @@ def write_results_to_file(output_filename: str, word_count: int, sentence_count:
     :param sentence_count: Кількість речень.
     """
     with open(output_filename, 'w', encoding='utf-8') as file:
-        file.write(f"Кількість слів: {word_count}, Кількість речень: {sentence_count}\n")
+        file.write(f"Number of words: {word_count}, Number of sentences: {sentence_count}\n")
